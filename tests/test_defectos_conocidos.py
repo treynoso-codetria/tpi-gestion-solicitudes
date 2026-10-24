@@ -26,7 +26,6 @@ class TestDefectosConocidos(unittest.TestCase):
     def tearDown(self):
         self._tmp.cleanup()
 
-    @unittest.expectedFailure
     def test_d1_reporte_sin_solicitudes_no_debe_fallar(self):
         salida, errores, codigo = ejecutar_cli("5\n0\n", self.directorio)
         self.assertEqual(0, codigo, errores)

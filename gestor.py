@@ -4,6 +4,7 @@ from solicitudes.almacenamiento import Almacenamiento
 from solicitudes.errores import ErrorDeNegocio
 from solicitudes.modelo import Estado, Estudiante, Solicitud, TipoSolicitud
 from solicitudes.pedidos import DatosEstudiante, PedidoSolicitud
+from solicitudes.reporte import GeneradorReporte
 from solicitudes.repositorio import RepositorioSolicitudes
 from solicitudes.validaciones import es_email_valido
 
@@ -13,6 +14,7 @@ class GestorSolicitudes:
 
     def __init__(self, almacenamiento: Almacenamiento):
         self.repositorio = RepositorioSolicitudes(almacenamiento)
+        self.generador_reporte = GeneradorReporte(self.repositorio)
 
     @staticmethod
     def _fecha_hoy():
@@ -125,30 +127,8 @@ class GestorSolicitudes:
                   + solicitud.prioridad.ljust(7) + solicitud.estado.ljust(13) + nombre_responsable)
         return encontradas
 
-    def _contar(self, condicion):
-        return sum(1 for solicitud in self.repositorio.listar_solicitudes() if condicion(solicitud))
-
     def reporte(self):
-        total = len(self.repositorio.listar_solicitudes())
-        print("===== REPORTE DE SOLICITUDES =====")
-        print("Total de solicitudes: " + str(total))
-        print("--- Por estado ---")
-        for estado in Estado:
-            cantidad = self._contar(lambda s, e=estado: s.estado == e)
-            porcentaje = cantidad * 100 / total
-            print(estado.ljust(12) + str(cantidad).rjust(4) + "  (" + str(round(porcentaje, 1)) + "%)")
-        print("--- Por tipo ---")
-        for tipo in TipoSolicitud:
-            cantidad = self._contar(lambda s, t=tipo: s.tipo == t)
-            print(tipo.ljust(16) + str(cantidad).rjust(4))
-        print("--- Carga por responsable (abiertas) ---")
-        for responsable in self.repositorio.listar_responsables():
-            cantidad = self._contar(
-                lambda s, r=responsable: s.responsable_id == r.id and not s.esta_finalizada)
-            print(responsable.descripcion.ljust(28) + str(cantidad).rjust(4))
-        sin_responsable = self._contar(lambda s: s.responsable_id is None and not s.esta_finalizada)
-        print("Sin responsable".ljust(28) + str(sin_responsable).rjust(4))
-        print("==================================")
+        print(self.generador_reporte.generar())
 
     def listar_responsables(self):
         for responsable in self.repositorio.listar_responsables():
