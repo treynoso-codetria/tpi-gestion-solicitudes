@@ -33,7 +33,6 @@ class TestDefectosConocidos(unittest.TestCase):
         self.assertIn("Total de solicitudes: 0", salida)
         self.assertIn("PENDIENTE      0  (0.0%)", salida)
 
-    @unittest.expectedFailure
     def test_d2_registro_rechazado_no_debe_crear_al_estudiante(self):
         entrada = REGISTRO_CON_PRIORIDAD_INVALIDA + "\n7\n20001\neva.nueva@mail.com\n0\n"
         salida, _, _ = ejecutar_cli(entrada, self.directorio)

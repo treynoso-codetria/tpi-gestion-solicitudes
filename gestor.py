@@ -1,7 +1,9 @@
 import json
 from datetime import datetime
 
-from solicitudes.modelo import Estado, Prioridad, TipoSolicitud
+from solicitudes.modelo import Estado, TipoSolicitud
+from solicitudes.pedidos import DatosEstudiante, PedidoSolicitud
+from solicitudes.validaciones import es_email_valido
 
 ARCHIVO = "solicitudes.json"
 
@@ -41,10 +43,6 @@ class GestorSolicitudes:
         return datetime.now().strftime("%Y-%m-%d")
 
     @staticmethod
-    def _email_valido(email):
-        return "@" in email and "." in email.split("@")[-1]
-
-    @staticmethod
     def _esta_finalizada(solicitud):
         return Estado(solicitud["estado"]).es_final
 
@@ -69,32 +67,17 @@ class GestorSolicitudes:
     def _registrar_evento(self, solicitud, evento):
         solicitud["historial"].append({"fecha": self._fecha_hoy(), "evento": evento})
 
-    @staticmethod
-    def _validar_datos_solicitud(legajo, nombre, apellido, email, tipo, descripcion):
-        """Devuelve el mensaje de error o None si los datos son validos."""
-        if legajo == "" or not legajo.isdigit() or len(legajo) < 5:
-            return "Error: legajo invalido"
-        if nombre.strip() == "" or apellido.strip() == "":
-            return "Error: nombre y apellido son obligatorios"
-        if not GestorSolicitudes._email_valido(email):
-            return "Error: email invalido"
-        if TipoSolicitud.desde_texto(tipo) is None:
-            return "Error: tipo de solicitud invalido"
-        if len(descripcion.strip()) < 10:
-            return "Error: la descripcion debe tener al menos 10 caracteres"
-        return None
-
-    def _registrar_o_actualizar_estudiante(self, legajo, nombre, apellido, email, carrera):
-        estudiante = self._buscar_estudiante(legajo)
+    def _registrar_o_actualizar_estudiante(self, datos: DatosEstudiante):
+        estudiante = self._buscar_estudiante(datos.legajo)
         if estudiante is not None:
-            estudiante["email"] = email
+            estudiante["email"] = datos.email
             return
         self.datos["estudiantes"].append({
-            "legajo": legajo,
-            "nombre": nombre,
-            "apellido": apellido,
-            "email": email,
-            "carrera": carrera
+            "legajo": datos.legajo,
+            "nombre": datos.nombre,
+            "apellido": datos.apellido,
+            "email": datos.email,
+            "carrera": datos.carrera
         })
 
     @staticmethod
@@ -112,27 +95,22 @@ class GestorSolicitudes:
     # ---------------------------------------------------------------
     # Operaciones
     # ---------------------------------------------------------------
-    def registrar_solicitud(self, legajo, nombre, apellido, email, carrera, tipo, descripcion, prioridad):
-        error = self._validar_datos_solicitud(legajo, nombre, apellido, email, tipo, descripcion)
+    def registrar_solicitud(self, pedido: PedidoSolicitud):
+        error = pedido.error_de_validacion()
         if error is not None:
             print(error)
             return -1
 
-        self._registrar_o_actualizar_estudiante(legajo, nombre, apellido, email, carrera)
-
-        if prioridad == "":
-            prioridad = TipoSolicitud(tipo).prioridad_por_defecto
-        elif Prioridad.desde_texto(prioridad) is None:
-            print("Error: prioridad invalida")
-            return -1
-        dias = Prioridad(prioridad).dias_de_plazo
+        self._registrar_o_actualizar_estudiante(pedido.estudiante)
+        prioridad = pedido.prioridad_efectiva()
+        dias = prioridad.dias_de_plazo
 
         self.datos["ultimo_id"] = self.datos["ultimo_id"] + 1
         solicitud = {
             "id": self.datos["ultimo_id"],
-            "legajo": legajo,
-            "tipo": tipo,
-            "descripcion": descripcion,
+            "legajo": pedido.estudiante.legajo,
+            "tipo": pedido.tipo,
+            "descripcion": pedido.descripcion,
             "prioridad": str(prioridad),
             "estado": str(Estado.PENDIENTE),
             "responsable": None,
@@ -186,7 +164,7 @@ class GestorSolicitudes:
         return True
 
     def actualizar_email(self, legajo, email):
-        if not self._email_valido(email):
+        if not es_email_valido(email):
             print("Error: email invalido")
             return False
         estudiante = self._buscar_estudiante(legajo)
@@ -258,15 +236,20 @@ class GestorSolicitudes:
             return None
 
     def _opcion_registrar(self):
-        legajo = input("Legajo: ").strip()
-        nombre = input("Nombre: ").strip()
-        apellido = input("Apellido: ").strip()
-        email = input("Email: ").strip()
-        carrera = input("Carrera: ").strip()
-        tipo = input("Tipo (CERTIFICADO/EQUIVALENCIA/CAMBIO_COMISION/RECLAMO_NOTA/BAJA): ").strip().upper()
-        descripcion = input("Descripcion: ").strip()
-        prioridad = input("Prioridad (BAJA/MEDIA/ALTA, vacio = automatica): ").strip().upper()
-        self.registrar_solicitud(legajo, nombre, apellido, email, carrera, tipo, descripcion, prioridad)
+        estudiante = DatosEstudiante(
+            legajo=input("Legajo: ").strip(),
+            nombre=input("Nombre: ").strip(),
+            apellido=input("Apellido: ").strip(),
+            email=input("Email: ").strip(),
+            carrera=input("Carrera: ").strip(),
+        )
+        pedido = PedidoSolicitud(
+            estudiante=estudiante,
+            tipo=input("Tipo (CERTIFICADO/EQUIVALENCIA/CAMBIO_COMISION/RECLAMO_NOTA/BAJA): ").strip().upper(),
+            descripcion=input("Descripcion: ").strip(),
+            prioridad=input("Prioridad (BAJA/MEDIA/ALTA, vacio = automatica): ").strip().upper(),
+        )
+        self.registrar_solicitud(pedido)
 
     def _opcion_cambiar_estado(self):
         id_solicitud = self._pedir_entero("ID de solicitud: ")
