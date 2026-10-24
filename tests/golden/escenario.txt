@@ -1,0 +1,155 @@
+1
+10234
+Ana
+Lopez
+ana.lopez@mail.com
+Tecnicatura en Programacion
+RECLAMO_NOTA
+Reclamo por la nota del parcial 2 de Programacion III
+
+1
+10567
+Bruno
+Diaz
+bruno.diaz@mail.com
+Tecnicatura en Programacion
+CERTIFICADO
+Certificado de alumno regular para presentar en el trabajo
+
+1
+12a
+Carla
+Ferro
+carla@mail.com
+Tecnicatura en Programacion
+BAJA
+Solicito la baja de la materia Ingles II
+
+1
+10890
+Carla
+Ferro
+carla.sin.dominio@mail
+Tecnicatura en Programacion
+BAJA
+Solicito la baja de la materia Ingles II
+
+1
+10234
+Ana
+Lopez
+ana.lopez@alumnos.utn.edu.ar
+Tecnicatura en Programacion
+EQUIVALENCIA
+Pedido de equivalencia de Matematica cursada en otra facultad
+ALTA
+1
+10890
+Carla
+Ferro
+carla.ferro@mail.com
+Tecnicatura en Programacion
+CAMBIO_COMISION
+Cambio a la comision C4-09 por superposicion horaria
+media
+1
+10890
+Carla
+Ferro
+carla.ferro@mail.com
+Tecnicatura en Programacion
+TRAMITE
+Tipo inexistente para probar la validacion
+
+1
+10890
+Carla
+Ferro
+carla.ferro@mail.com
+Tecnicatura en Programacion
+BAJA
+Corta
+
+2
+1
+EN_REVISION
+3
+1
+2
+2
+1
+EN_REVISION
+2
+1
+PENDIENTE
+2
+1
+RESUELTA
+2
+1
+RECHAZADA
+3
+1
+3
+2
+99
+EN_REVISION
+2
+abc
+2
+2
+RECHAZADA
+2
+3
+CERRADA
+3
+3
+9
+3
+3
+1
+3
+xyz
+4
+PENDIENTE
+
+
+
+4
+
+
+
+
+4
+
+XYZ
+
+
+4
+
+
+10234
+
+4
+
+
+
+MEDIA
+4
+RESUELTA
+CERTIFICADO
+
+
+5
+6
+7
+10567
+bruno.diaz@alumnos.utn.edu.ar
+7
+99999
+nadie@mail.com
+7
+10567
+correo-invalido
+9
+0

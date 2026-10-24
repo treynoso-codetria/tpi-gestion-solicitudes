@@ -1,0 +1,138 @@
+{
+  "solicitudes": [
+    {
+      "id": 1,
+      "legajo": "10234",
+      "tipo": "RECLAMO_NOTA",
+      "descripcion": "Reclamo por la nota del parcial 2 de Programacion III",
+      "prioridad": "ALTA",
+      "estado": "RESUELTA",
+      "responsable": 2,
+      "fecha": "<FECHA>",
+      "dias_sla": 3,
+      "historial": [
+        {
+          "fecha": "<FECHA>",
+          "evento": "Creada en estado PENDIENTE"
+        },
+        {
+          "fecha": "<FECHA>",
+          "evento": "Asignada a Martin Sosa (Bedelia)"
+        },
+        {
+          "fecha": "<FECHA>",
+          "evento": "Cambio de PENDIENTE a EN_REVISION"
+        },
+        {
+          "fecha": "<FECHA>",
+          "evento": "Cambio de EN_REVISION a RESUELTA"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "legajo": "10567",
+      "tipo": "CERTIFICADO",
+      "descripcion": "Certificado de alumno regular para presentar en el trabajo",
+      "prioridad": "BAJA",
+      "estado": "RECHAZADA",
+      "responsable": null,
+      "fecha": "<FECHA>",
+      "dias_sla": 15,
+      "historial": [
+        {
+          "fecha": "<FECHA>",
+          "evento": "Creada en estado PENDIENTE"
+        },
+        {
+          "fecha": "<FECHA>",
+          "evento": "Cambio de PENDIENTE a RECHAZADA"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "legajo": "10234",
+      "tipo": "EQUIVALENCIA",
+      "descripcion": "Pedido de equivalencia de Matematica cursada en otra facultad",
+      "prioridad": "ALTA",
+      "estado": "PENDIENTE",
+      "responsable": 1,
+      "fecha": "<FECHA>",
+      "dias_sla": 3,
+      "historial": [
+        {
+          "fecha": "<FECHA>",
+          "evento": "Creada en estado PENDIENTE"
+        },
+        {
+          "fecha": "<FECHA>",
+          "evento": "Asignada a Laura Gomez (Alumnado)"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "legajo": "10890",
+      "tipo": "CAMBIO_COMISION",
+      "descripcion": "Cambio a la comision C4-09 por superposicion horaria",
+      "prioridad": "MEDIA",
+      "estado": "PENDIENTE",
+      "responsable": null,
+      "fecha": "<FECHA>",
+      "dias_sla": 7,
+      "historial": [
+        {
+          "fecha": "<FECHA>",
+          "evento": "Creada en estado PENDIENTE"
+        }
+      ]
+    }
+  ],
+  "estudiantes": [
+    {
+      "legajo": "10234",
+      "nombre": "Ana",
+      "apellido": "Lopez",
+      "email": "ana.lopez@alumnos.utn.edu.ar",
+      "carrera": "Tecnicatura en Programacion"
+    },
+    {
+      "legajo": "10567",
+      "nombre": "Bruno",
+      "apellido": "Diaz",
+      "email": "bruno.diaz@alumnos.utn.edu.ar",
+      "carrera": "Tecnicatura en Programacion"
+    },
+    {
+      "legajo": "10890",
+      "nombre": "Carla",
+      "apellido": "Ferro",
+      "email": "carla.ferro@mail.com",
+      "carrera": "Tecnicatura en Programacion"
+    }
+  ],
+  "responsables": [
+    {
+      "id": 1,
+      "nombre": "Laura Gomez",
+      "area": "Alumnado"
+    },
+    {
+      "id": 2,
+      "nombre": "Martin Sosa",
+      "area": "Bedelia"
+    },
+    {
+      "id": 3,
+      "nombre": "Carla Ruiz",
+      "area": "Coordinacion"
+    },
+    {
+      "id": 4,
+      "nombre": "Diego Paz",
+      "area": "Tesoreria"
+    }
+  ],
+  "ultimo_id": 4
+}

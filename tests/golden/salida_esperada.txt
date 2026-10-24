@@ -1,0 +1,432 @@
+
+=== GESTION DE SOLICITUDES ACADEMICAS ===
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar solicitudes
+5. Reporte
+6. Listar responsables
+7. Actualizar email de estudiante
+0. Salir
+Opcion: Legajo: Nombre: Apellido: Email: Carrera: Tipo (CERTIFICADO/EQUIVALENCIA/CAMBIO_COMISION/RECLAMO_NOTA/BAJA): Descripcion: Prioridad (BAJA/MEDIA/ALTA, vacio = automatica): Solicitud registrada con ID 1 (prioridad ALTA, plazo 3 dias)
+
+=== GESTION DE SOLICITUDES ACADEMICAS ===
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar solicitudes
+5. Reporte
+6. Listar responsables
+7. Actualizar email de estudiante
+0. Salir
+Opcion: Legajo: Nombre: Apellido: Email: Carrera: Tipo (CERTIFICADO/EQUIVALENCIA/CAMBIO_COMISION/RECLAMO_NOTA/BAJA): Descripcion: Prioridad (BAJA/MEDIA/ALTA, vacio = automatica): Solicitud registrada con ID 2 (prioridad BAJA, plazo 15 dias)
+
+=== GESTION DE SOLICITUDES ACADEMICAS ===
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar solicitudes
+5. Reporte
+6. Listar responsables
+7. Actualizar email de estudiante
+0. Salir
+Opcion: Legajo: Nombre: Apellido: Email: Carrera: Tipo (CERTIFICADO/EQUIVALENCIA/CAMBIO_COMISION/RECLAMO_NOTA/BAJA): Descripcion: Prioridad (BAJA/MEDIA/ALTA, vacio = automatica): Error: legajo invalido
+
+=== GESTION DE SOLICITUDES ACADEMICAS ===
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar solicitudes
+5. Reporte
+6. Listar responsables
+7. Actualizar email de estudiante
+0. Salir
+Opcion: Legajo: Nombre: Apellido: Email: Carrera: Tipo (CERTIFICADO/EQUIVALENCIA/CAMBIO_COMISION/RECLAMO_NOTA/BAJA): Descripcion: Prioridad (BAJA/MEDIA/ALTA, vacio = automatica): Error: email invalido
+
+=== GESTION DE SOLICITUDES ACADEMICAS ===
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar solicitudes
+5. Reporte
+6. Listar responsables
+7. Actualizar email de estudiante
+0. Salir
+Opcion: Legajo: Nombre: Apellido: Email: Carrera: Tipo (CERTIFICADO/EQUIVALENCIA/CAMBIO_COMISION/RECLAMO_NOTA/BAJA): Descripcion: Prioridad (BAJA/MEDIA/ALTA, vacio = automatica): Solicitud registrada con ID 3 (prioridad ALTA, plazo 3 dias)
+
+=== GESTION DE SOLICITUDES ACADEMICAS ===
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar solicitudes
+5. Reporte
+6. Listar responsables
+7. Actualizar email de estudiante
+0. Salir
+Opcion: Legajo: Nombre: Apellido: Email: Carrera: Tipo (CERTIFICADO/EQUIVALENCIA/CAMBIO_COMISION/RECLAMO_NOTA/BAJA): Descripcion: Prioridad (BAJA/MEDIA/ALTA, vacio = automatica): Solicitud registrada con ID 4 (prioridad MEDIA, plazo 7 dias)
+
+=== GESTION DE SOLICITUDES ACADEMICAS ===
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar solicitudes
+5. Reporte
+6. Listar responsables
+7. Actualizar email de estudiante
+0. Salir
+Opcion: Legajo: Nombre: Apellido: Email: Carrera: Tipo (CERTIFICADO/EQUIVALENCIA/CAMBIO_COMISION/RECLAMO_NOTA/BAJA): Descripcion: Prioridad (BAJA/MEDIA/ALTA, vacio = automatica): Error: tipo de solicitud invalido
+
+=== GESTION DE SOLICITUDES ACADEMICAS ===
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar solicitudes
+5. Reporte
+6. Listar responsables
+7. Actualizar email de estudiante
+0. Salir
+Opcion: Legajo: Nombre: Apellido: Email: Carrera: Tipo (CERTIFICADO/EQUIVALENCIA/CAMBIO_COMISION/RECLAMO_NOTA/BAJA): Descripcion: Prioridad (BAJA/MEDIA/ALTA, vacio = automatica): Error: la descripcion debe tener al menos 10 caracteres
+
+=== GESTION DE SOLICITUDES ACADEMICAS ===
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar solicitudes
+5. Reporte
+6. Listar responsables
+7. Actualizar email de estudiante
+0. Salir
+Opcion: ID de solicitud: Nuevo estado (EN_REVISION/RESUELTA/RECHAZADA): Error: debe asignar un responsable antes de pasar a revision
+
+=== GESTION DE SOLICITUDES ACADEMICAS ===
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar solicitudes
+5. Reporte
+6. Listar responsables
+7. Actualizar email de estudiante
+0. Salir
+Opcion: ID de solicitud: 1 - Laura Gomez (Alumnado)
+2 - Martin Sosa (Bedelia)
+3 - Carla Ruiz (Coordinacion)
+4 - Diego Paz (Tesoreria)
+ID de responsable: Solicitud 1 asignada a Martin Sosa (Bedelia)
+
+=== GESTION DE SOLICITUDES ACADEMICAS ===
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar solicitudes
+5. Reporte
+6. Listar responsables
+7. Actualizar email de estudiante
+0. Salir
+Opcion: ID de solicitud: Nuevo estado (EN_REVISION/RESUELTA/RECHAZADA): Solicitud 1 ahora esta en estado EN_REVISION
+
+=== GESTION DE SOLICITUDES ACADEMICAS ===
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar solicitudes
+5. Reporte
+6. Listar responsables
+7. Actualizar email de estudiante
+0. Salir
+Opcion: ID de solicitud: Nuevo estado (EN_REVISION/RESUELTA/RECHAZADA): Error: transicion no permitida de EN_REVISION a PENDIENTE
+
+=== GESTION DE SOLICITUDES ACADEMICAS ===
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar solicitudes
+5. Reporte
+6. Listar responsables
+7. Actualizar email de estudiante
+0. Salir
+Opcion: ID de solicitud: Nuevo estado (EN_REVISION/RESUELTA/RECHAZADA): Solicitud 1 ahora esta en estado RESUELTA
+
+=== GESTION DE SOLICITUDES ACADEMICAS ===
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar solicitudes
+5. Reporte
+6. Listar responsables
+7. Actualizar email de estudiante
+0. Salir
+Opcion: ID de solicitud: Nuevo estado (EN_REVISION/RESUELTA/RECHAZADA): Error: la solicitud 1 ya esta finalizada
+
+=== GESTION DE SOLICITUDES ACADEMICAS ===
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar solicitudes
+5. Reporte
+6. Listar responsables
+7. Actualizar email de estudiante
+0. Salir
+Opcion: ID de solicitud: 1 - Laura Gomez (Alumnado)
+2 - Martin Sosa (Bedelia)
+3 - Carla Ruiz (Coordinacion)
+4 - Diego Paz (Tesoreria)
+ID de responsable: Error: la solicitud 1 ya esta finalizada
+
+=== GESTION DE SOLICITUDES ACADEMICAS ===
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar solicitudes
+5. Reporte
+6. Listar responsables
+7. Actualizar email de estudiante
+0. Salir
+Opcion: ID de solicitud: Nuevo estado (EN_REVISION/RESUELTA/RECHAZADA): Error: no existe la solicitud 99
+
+=== GESTION DE SOLICITUDES ACADEMICAS ===
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar solicitudes
+5. Reporte
+6. Listar responsables
+7. Actualizar email de estudiante
+0. Salir
+Opcion: ID de solicitud: Error: ID invalido
+
+=== GESTION DE SOLICITUDES ACADEMICAS ===
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar solicitudes
+5. Reporte
+6. Listar responsables
+7. Actualizar email de estudiante
+0. Salir
+Opcion: ID de solicitud: Nuevo estado (EN_REVISION/RESUELTA/RECHAZADA): Solicitud 2 ahora esta en estado RECHAZADA
+
+=== GESTION DE SOLICITUDES ACADEMICAS ===
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar solicitudes
+5. Reporte
+6. Listar responsables
+7. Actualizar email de estudiante
+0. Salir
+Opcion: ID de solicitud: Nuevo estado (EN_REVISION/RESUELTA/RECHAZADA): Error: estado invalido
+
+=== GESTION DE SOLICITUDES ACADEMICAS ===
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar solicitudes
+5. Reporte
+6. Listar responsables
+7. Actualizar email de estudiante
+0. Salir
+Opcion: ID de solicitud: 1 - Laura Gomez (Alumnado)
+2 - Martin Sosa (Bedelia)
+3 - Carla Ruiz (Coordinacion)
+4 - Diego Paz (Tesoreria)
+ID de responsable: Error: no existe el responsable 9
+
+=== GESTION DE SOLICITUDES ACADEMICAS ===
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar solicitudes
+5. Reporte
+6. Listar responsables
+7. Actualizar email de estudiante
+0. Salir
+Opcion: ID de solicitud: 1 - Laura Gomez (Alumnado)
+2 - Martin Sosa (Bedelia)
+3 - Carla Ruiz (Coordinacion)
+4 - Diego Paz (Tesoreria)
+ID de responsable: Solicitud 3 asignada a Laura Gomez (Alumnado)
+
+=== GESTION DE SOLICITUDES ACADEMICAS ===
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar solicitudes
+5. Reporte
+6. Listar responsables
+7. Actualizar email de estudiante
+0. Salir
+Opcion: ID de solicitud: Error: ID invalido
+
+=== GESTION DE SOLICITUDES ACADEMICAS ===
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar solicitudes
+5. Reporte
+6. Listar responsables
+7. Actualizar email de estudiante
+0. Salir
+Opcion: Estado (vacio = todos): Tipo (vacio = todos): Legajo (vacio = todos): Prioridad (vacio = todas): ID  LEGAJO  TIPO            PRIOR. ESTADO       RESPONSABLE
+3   10234   EQUIVALENCIA    ALTA   PENDIENTE    Laura Gomez
+4   10890   CAMBIO_COMISION MEDIA  PENDIENTE    -
+
+=== GESTION DE SOLICITUDES ACADEMICAS ===
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar solicitudes
+5. Reporte
+6. Listar responsables
+7. Actualizar email de estudiante
+0. Salir
+Opcion: Estado (vacio = todos): Tipo (vacio = todos): Legajo (vacio = todos): Prioridad (vacio = todas): ID  LEGAJO  TIPO            PRIOR. ESTADO       RESPONSABLE
+1   10234   RECLAMO_NOTA    ALTA   RESUELTA     Martin Sosa
+2   10567   CERTIFICADO     BAJA   RECHAZADA    -
+3   10234   EQUIVALENCIA    ALTA   PENDIENTE    Laura Gomez
+4   10890   CAMBIO_COMISION MEDIA  PENDIENTE    -
+
+=== GESTION DE SOLICITUDES ACADEMICAS ===
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar solicitudes
+5. Reporte
+6. Listar responsables
+7. Actualizar email de estudiante
+0. Salir
+Opcion: Estado (vacio = todos): Tipo (vacio = todos): Legajo (vacio = todos): Prioridad (vacio = todas): Error: tipo de solicitud invalido
+
+=== GESTION DE SOLICITUDES ACADEMICAS ===
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar solicitudes
+5. Reporte
+6. Listar responsables
+7. Actualizar email de estudiante
+0. Salir
+Opcion: Estado (vacio = todos): Tipo (vacio = todos): Legajo (vacio = todos): Prioridad (vacio = todas): ID  LEGAJO  TIPO            PRIOR. ESTADO       RESPONSABLE
+1   10234   RECLAMO_NOTA    ALTA   RESUELTA     Martin Sosa
+3   10234   EQUIVALENCIA    ALTA   PENDIENTE    Laura Gomez
+
+=== GESTION DE SOLICITUDES ACADEMICAS ===
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar solicitudes
+5. Reporte
+6. Listar responsables
+7. Actualizar email de estudiante
+0. Salir
+Opcion: Estado (vacio = todos): Tipo (vacio = todos): Legajo (vacio = todos): Prioridad (vacio = todas): ID  LEGAJO  TIPO            PRIOR. ESTADO       RESPONSABLE
+4   10890   CAMBIO_COMISION MEDIA  PENDIENTE    -
+
+=== GESTION DE SOLICITUDES ACADEMICAS ===
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar solicitudes
+5. Reporte
+6. Listar responsables
+7. Actualizar email de estudiante
+0. Salir
+Opcion: Estado (vacio = todos): Tipo (vacio = todos): Legajo (vacio = todos): Prioridad (vacio = todas): No se encontraron solicitudes
+
+=== GESTION DE SOLICITUDES ACADEMICAS ===
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar solicitudes
+5. Reporte
+6. Listar responsables
+7. Actualizar email de estudiante
+0. Salir
+Opcion: ===== REPORTE DE SOLICITUDES =====
+Total de solicitudes: 4
+--- Por estado ---
+PENDIENTE      2  (50.0%)
+EN_REVISION    0  (0.0%)
+RESUELTA       1  (25.0%)
+RECHAZADA      1  (25.0%)
+--- Por tipo ---
+CERTIFICADO        1
+EQUIVALENCIA       1
+CAMBIO_COMISION    1
+RECLAMO_NOTA       1
+BAJA               0
+--- Carga por responsable (abiertas) ---
+Laura Gomez (Alumnado)         1
+Martin Sosa (Bedelia)          0
+Carla Ruiz (Coordinacion)      0
+Diego Paz (Tesoreria)          0
+Sin responsable                1
+==================================
+
+=== GESTION DE SOLICITUDES ACADEMICAS ===
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar solicitudes
+5. Reporte
+6. Listar responsables
+7. Actualizar email de estudiante
+0. Salir
+Opcion: 1 - Laura Gomez (Alumnado)
+2 - Martin Sosa (Bedelia)
+3 - Carla Ruiz (Coordinacion)
+4 - Diego Paz (Tesoreria)
+
+=== GESTION DE SOLICITUDES ACADEMICAS ===
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar solicitudes
+5. Reporte
+6. Listar responsables
+7. Actualizar email de estudiante
+0. Salir
+Opcion: Legajo: Nuevo email: Email actualizado para el legajo 10567
+
+=== GESTION DE SOLICITUDES ACADEMICAS ===
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar solicitudes
+5. Reporte
+6. Listar responsables
+7. Actualizar email de estudiante
+0. Salir
+Opcion: Legajo: Nuevo email: Error: no existe el estudiante 99999
+
+=== GESTION DE SOLICITUDES ACADEMICAS ===
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar solicitudes
+5. Reporte
+6. Listar responsables
+7. Actualizar email de estudiante
+0. Salir
+Opcion: Legajo: Nuevo email: Error: email invalido
+
+=== GESTION DE SOLICITUDES ACADEMICAS ===
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar solicitudes
+5. Reporte
+6. Listar responsables
+7. Actualizar email de estudiante
+0. Salir
+Opcion: Opcion invalida
+
+=== GESTION DE SOLICITUDES ACADEMICAS ===
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar solicitudes
+5. Reporte
+6. Listar responsables
+7. Actualizar email de estudiante
+0. Salir
+Opcion: Hasta luego
