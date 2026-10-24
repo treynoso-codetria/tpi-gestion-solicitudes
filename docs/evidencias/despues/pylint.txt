@@ -1,0 +1,28 @@
+************* Module solicitudes.cli
+solicitudes/cli.py:73:0: C0301: Line too long (101/100) (line-too-long)
+solicitudes/cli.py:29:0: R0903: Too few public methods (1/2) (too-few-public-methods)
+************* Module solicitudes.pedidos
+solicitudes/pedidos.py:76:19: R1714: Consider merging these comparisons with 'in' by using 'buscado in ('', valor)'. Use a set instead if elements are hashable. (consider-using-in)
+************* Module solicitudes.repositorio
+solicitudes/repositorio.py:11:0: C0301: Line too long (107/100) (line-too-long)
+solicitudes/repositorio.py:74:0: C0301: Line too long (107/100) (line-too-long)
+************* Module solicitudes.modelo
+solicitudes/modelo.py:116:0: R0902: Too many instance attributes (10/7) (too-many-instance-attributes)
+************* Module solicitudes.reporte
+solicitudes/reporte.py:34:0: C0301: Line too long (101/100) (line-too-long)
+solicitudes/reporte.py:16:0: R0903: Too few public methods (1/2) (too-few-public-methods)
+************* Module main
+main.py:1:0: R0801: Similar lines in 2 files
+==solicitudes.modelo:[90:97]
+==solicitudes.pedidos:[15:22]
+    legajo: str
+    nombre: str
+    apellido: str
+    email: str
+    carrera: str
+
+    def validar(self) -> None: (duplicate-code)
+
+------------------------------------------------------------------
+Your code has been rated at 9.79/10 (previous run: 8.21/10, +1.58)
+

@@ -1,0 +1,6 @@
+Defectos D1-D3: tests finales (sin expectedFailure) ejecutados contra el codigo del tag estado-inicial
+FAIL: test_d1_reporte_sin_solicitudes_no_debe_fallar (tests.test_defectos_conocidos.TestDefectosConocidos.test_d1_reporte_sin_solicitudes_no_debe_fallar)
+FAIL: test_d2_registro_rechazado_no_debe_crear_al_estudiante (tests.test_defectos_conocidos.TestDefectosConocidos.test_d2_registro_rechazado_no_debe_crear_al_estudiante)
+FAIL: test_d3_archivo_danado_no_debe_sobrescribirse (tests.test_defectos_conocidos.TestDefectosConocidos.test_d3_archivo_danado_no_debe_sobrescribirse)
+Ran 3 tests in 0.085s
+FAILED (failures=3)

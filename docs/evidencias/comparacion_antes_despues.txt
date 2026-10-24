@@ -1,0 +1,11 @@
+== Comparacion de comportamiento externo: estado-inicial vs estado-refactorizado ==
+Entrada: tests/golden/escenario.txt (35 operaciones por consola)
+
+-- diff de la salida por consola --
+(sin diferencias)
+
+-- diff del archivo solicitudes.json con fechas normalizadas --
+(sin diferencias)
+
+Lineas de salida: 432 (base) / 432 (refactorizado)
+Bytes de solicitudes.json: 3224 (base) / 3224 (refactorizado)
