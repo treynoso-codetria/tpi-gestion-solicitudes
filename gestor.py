@@ -1,314 +1,355 @@
 import json
-import os
 from datetime import datetime
 
 ARCHIVO = "solicitudes.json"
+TIPOS_VALIDOS = ("CERTIFICADO", "EQUIVALENCIA", "CAMBIO_COMISION", "RECLAMO_NOTA", "BAJA")
+ESTADOS_VALIDOS = ("PENDIENTE", "EN_REVISION", "RESUELTA", "RECHAZADA")
+ESTADOS_FINALES = ("RESUELTA", "RECHAZADA")
 
 
 class GestorSolicitudes:
     # clase principal del sistema
 
     def __init__(self):
-        self.d = {"solicitudes": [], "estudiantes": [], "responsables": [], "ultimo_id": 0}
+        self.datos = {"solicitudes": [], "estudiantes": [], "responsables": [], "ultimo_id": 0}
         self.cargar()
-        if len(self.d["responsables"]) == 0:
+        if len(self.datos["responsables"]) == 0:
             # responsables por defecto
-            self.d["responsables"].append({"id": 1, "nombre": "Laura Gomez", "area": "Alumnado"})
-            self.d["responsables"].append({"id": 2, "nombre": "Martin Sosa", "area": "Bedelia"})
-            self.d["responsables"].append({"id": 3, "nombre": "Carla Ruiz", "area": "Coordinacion"})
-            self.d["responsables"].append({"id": 4, "nombre": "Diego Paz", "area": "Tesoreria"})
+            self.datos["responsables"].append({"id": 1, "nombre": "Laura Gomez", "area": "Alumnado"})
+            self.datos["responsables"].append({"id": 2, "nombre": "Martin Sosa", "area": "Bedelia"})
+            self.datos["responsables"].append({"id": 3, "nombre": "Carla Ruiz", "area": "Coordinacion"})
+            self.datos["responsables"].append({"id": 4, "nombre": "Diego Paz", "area": "Tesoreria"})
             self.guardar()
 
     def cargar(self):
         try:
             f = open(ARCHIVO, "r", encoding="utf-8")
-            self.d = json.load(f)
+            self.datos = json.load(f)
             f.close()
         except:
             pass
 
     def guardar(self):
         f = open(ARCHIVO, "w", encoding="utf-8")
-        json.dump(self.d, f, indent=2, ensure_ascii=False)
+        json.dump(self.datos, f, indent=2, ensure_ascii=False)
         f.close()
 
-    def registrar_solicitud(self, legajo, nombre, apellido, email, carrera, tipo, descripcion, prioridad):
-        # validaciones
+    # ---------------------------------------------------------------
+    # Metodos extraidos (antes el codigo estaba duplicado)
+    # ---------------------------------------------------------------
+    @staticmethod
+    def _fecha_hoy():
+        return datetime.now().strftime("%Y-%m-%d")
+
+    @staticmethod
+    def _email_valido(email):
+        return "@" in email and "." in email.split("@")[-1]
+
+    @staticmethod
+    def _esta_finalizada(solicitud):
+        return solicitud["estado"] in ESTADOS_FINALES
+
+    def _buscar_solicitud(self, id_solicitud):
+        for solicitud in self.datos["solicitudes"]:
+            if solicitud["id"] == id_solicitud:
+                return solicitud
+        return None
+
+    def _buscar_responsable(self, id_responsable):
+        for responsable in self.datos["responsables"]:
+            if responsable["id"] == id_responsable:
+                return responsable
+        return None
+
+    def _buscar_estudiante(self, legajo):
+        for estudiante in self.datos["estudiantes"]:
+            if estudiante["legajo"] == legajo:
+                return estudiante
+        return None
+
+    def _registrar_evento(self, solicitud, evento):
+        solicitud["historial"].append({"fecha": self._fecha_hoy(), "evento": evento})
+
+    @staticmethod
+    def _validar_datos_solicitud(legajo, nombre, apellido, email, tipo, descripcion):
+        """Devuelve el mensaje de error o None si los datos son validos."""
         if legajo == "" or not legajo.isdigit() or len(legajo) < 5:
-            print("Error: legajo invalido")
-            return -1
+            return "Error: legajo invalido"
         if nombre.strip() == "" or apellido.strip() == "":
-            print("Error: nombre y apellido son obligatorios")
-            return -1
-        if "@" not in email or "." not in email.split("@")[-1]:
-            print("Error: email invalido")
-            return -1
-        if tipo != "CERTIFICADO" and tipo != "EQUIVALENCIA" and tipo != "CAMBIO_COMISION" and tipo != "RECLAMO_NOTA" and tipo != "BAJA":
-            print("Error: tipo de solicitud invalido")
-            return -1
+            return "Error: nombre y apellido son obligatorios"
+        if not GestorSolicitudes._email_valido(email):
+            return "Error: email invalido"
+        if tipo not in TIPOS_VALIDOS:
+            return "Error: tipo de solicitud invalido"
         if len(descripcion.strip()) < 10:
-            print("Error: la descripcion debe tener al menos 10 caracteres")
+            return "Error: la descripcion debe tener al menos 10 caracteres"
+        return None
+
+    def _registrar_o_actualizar_estudiante(self, legajo, nombre, apellido, email, carrera):
+        estudiante = self._buscar_estudiante(legajo)
+        if estudiante is not None:
+            estudiante["email"] = email
+            return
+        self.datos["estudiantes"].append({
+            "legajo": legajo,
+            "nombre": nombre,
+            "apellido": apellido,
+            "email": email,
+            "carrera": carrera
+        })
+
+    @staticmethod
+    def _prioridad_por_defecto(tipo):
+        if tipo in ("RECLAMO_NOTA", "BAJA"):
+            return "ALTA"
+        if tipo in ("EQUIVALENCIA", "CAMBIO_COMISION"):
+            return "MEDIA"
+        return "BAJA"
+
+    @staticmethod
+    def _dias_de_plazo(prioridad):
+        if prioridad == "ALTA":
+            return 3
+        if prioridad == "MEDIA":
+            return 7
+        return 15
+
+    @staticmethod
+    def _transicion_permitida(solicitud, nuevo_estado):
+        """Devuelve el mensaje de error o None si la transicion es valida."""
+        actual = solicitud["estado"]
+        if actual == "PENDIENTE":
+            if nuevo_estado == "EN_REVISION":
+                if solicitud["responsable"] is None:
+                    return "Error: debe asignar un responsable antes de pasar a revision"
+                return None
+            if nuevo_estado == "RECHAZADA":
+                return None
+        elif actual == "EN_REVISION":
+            if nuevo_estado in ("RESUELTA", "RECHAZADA"):
+                return None
+        else:
+            return "Error: la solicitud " + str(solicitud["id"]) + " ya esta finalizada"
+        return "Error: transicion no permitida de " + actual + " a " + nuevo_estado
+
+    # ---------------------------------------------------------------
+    # Operaciones
+    # ---------------------------------------------------------------
+    def registrar_solicitud(self, legajo, nombre, apellido, email, carrera, tipo, descripcion, prioridad):
+        error = self._validar_datos_solicitud(legajo, nombre, apellido, email, tipo, descripcion)
+        if error is not None:
+            print(error)
             return -1
 
-        # buscar o crear estudiante
-        existe = False
-        for e in self.d["estudiantes"]:
-            if e["legajo"] == legajo:
-                existe = True
-                e["email"] = email
-        if existe == False:
-            self.d["estudiantes"].append({
-                "legajo": legajo,
-                "nombre": nombre,
-                "apellido": apellido,
-                "email": email,
-                "carrera": carrera
-            })
+        self._registrar_o_actualizar_estudiante(legajo, nombre, apellido, email, carrera)
 
-        # calcular prioridad
         if prioridad == "":
-            if tipo == "RECLAMO_NOTA":
-                prioridad = "ALTA"
-            elif tipo == "BAJA":
-                prioridad = "ALTA"
-            elif tipo == "EQUIVALENCIA":
-                prioridad = "MEDIA"
-            elif tipo == "CAMBIO_COMISION":
-                prioridad = "MEDIA"
-            else:
-                prioridad = "BAJA"
-        else:
-            if prioridad != "BAJA" and prioridad != "MEDIA" and prioridad != "ALTA":
-                print("Error: prioridad invalida")
-                return -1
+            prioridad = self._prioridad_por_defecto(tipo)
+        elif prioridad not in ("BAJA", "MEDIA", "ALTA"):
+            print("Error: prioridad invalida")
+            return -1
+        dias = self._dias_de_plazo(prioridad)
 
-        # dias de plazo segun prioridad
-        if prioridad == "ALTA":
-            dias = 3
-        elif prioridad == "MEDIA":
-            dias = 7
-        else:
-            dias = 15
-
-        self.d["ultimo_id"] = self.d["ultimo_id"] + 1
-        x = {
-            "id": self.d["ultimo_id"],
+        self.datos["ultimo_id"] = self.datos["ultimo_id"] + 1
+        solicitud = {
+            "id": self.datos["ultimo_id"],
             "legajo": legajo,
             "tipo": tipo,
             "descripcion": descripcion,
             "prioridad": prioridad,
             "estado": "PENDIENTE",
             "responsable": None,
-            "fecha": datetime.now().strftime("%Y-%m-%d"),
+            "fecha": self._fecha_hoy(),
             "dias_sla": dias,
-            "historial": [{"fecha": datetime.now().strftime("%Y-%m-%d"), "evento": "Creada en estado PENDIENTE"}]
+            "historial": []
         }
-        self.d["solicitudes"].append(x)
+        self._registrar_evento(solicitud, "Creada en estado PENDIENTE")
+        self.datos["solicitudes"].append(solicitud)
         self.guardar()
-        print("Solicitud registrada con ID " + str(x["id"]) + " (prioridad " + prioridad + ", plazo " + str(dias) + " dias)")
-        return x["id"]
+        print("Solicitud registrada con ID " + str(solicitud["id"]) + " (prioridad " + prioridad + ", plazo " + str(dias) + " dias)")
+        return solicitud["id"]
 
-    def cambiar_estado(self, id, nuevo):
-        s = None
-        for x in self.d["solicitudes"]:
-            if x["id"] == id:
-                s = x
-        if s == None:
-            print("Error: no existe la solicitud " + str(id))
+    def cambiar_estado(self, id_solicitud, nuevo_estado):
+        solicitud = self._buscar_solicitud(id_solicitud)
+        if solicitud is None:
+            print("Error: no existe la solicitud " + str(id_solicitud))
             return False
-        if nuevo != "PENDIENTE" and nuevo != "EN_REVISION" and nuevo != "RESUELTA" and nuevo != "RECHAZADA":
+        if nuevo_estado not in ESTADOS_VALIDOS:
             print("Error: estado invalido")
             return False
-
-        if s["estado"] == "PENDIENTE":
-            if nuevo == "EN_REVISION":
-                if s["responsable"] == None:
-                    print("Error: debe asignar un responsable antes de pasar a revision")
-                    return False
-            elif nuevo == "RECHAZADA":
-                pass
-            else:
-                print("Error: transicion no permitida de " + s["estado"] + " a " + nuevo)
-                return False
-        elif s["estado"] == "EN_REVISION":
-            if nuevo == "RESUELTA" or nuevo == "RECHAZADA":
-                pass
-            else:
-                print("Error: transicion no permitida de " + s["estado"] + " a " + nuevo)
-                return False
-        else:
-            print("Error: la solicitud " + str(id) + " ya esta finalizada")
+        error = self._transicion_permitida(solicitud, nuevo_estado)
+        if error is not None:
+            print(error)
             return False
 
-        s["historial"].append({"fecha": datetime.now().strftime("%Y-%m-%d"), "evento": "Cambio de " + s["estado"] + " a " + nuevo})
-        s["estado"] = nuevo
+        self._registrar_evento(solicitud, "Cambio de " + solicitud["estado"] + " a " + nuevo_estado)
+        solicitud["estado"] = nuevo_estado
         self.guardar()
-        print("Solicitud " + str(id) + " ahora esta en estado " + nuevo)
+        print("Solicitud " + str(id_solicitud) + " ahora esta en estado " + nuevo_estado)
         return True
 
-    def asignar_responsable(self, id, id_resp):
-        s = None
-        for x in self.d["solicitudes"]:
-            if x["id"] == id:
-                s = x
-        if s == None:
-            print("Error: no existe la solicitud " + str(id))
+    def asignar_responsable(self, id_solicitud, id_responsable):
+        solicitud = self._buscar_solicitud(id_solicitud)
+        if solicitud is None:
+            print("Error: no existe la solicitud " + str(id_solicitud))
             return False
-        if s["estado"] == "RESUELTA" or s["estado"] == "RECHAZADA":
-            print("Error: la solicitud " + str(id) + " ya esta finalizada")
+        if self._esta_finalizada(solicitud):
+            print("Error: la solicitud " + str(id_solicitud) + " ya esta finalizada")
             return False
-        r = None
-        for x in self.d["responsables"]:
-            if x["id"] == id_resp:
-                r = x
-        if r == None:
-            print("Error: no existe el responsable " + str(id_resp))
+        responsable = self._buscar_responsable(id_responsable)
+        if responsable is None:
+            print("Error: no existe el responsable " + str(id_responsable))
             return False
-        s["responsable"] = r["id"]
-        s["historial"].append({"fecha": datetime.now().strftime("%Y-%m-%d"), "evento": "Asignada a " + r["nombre"] + " (" + r["area"] + ")"})
+        descripcion_responsable = responsable["nombre"] + " (" + responsable["area"] + ")"
+        solicitud["responsable"] = responsable["id"]
+        self._registrar_evento(solicitud, "Asignada a " + descripcion_responsable)
         self.guardar()
-        print("Solicitud " + str(id) + " asignada a " + r["nombre"] + " (" + r["area"] + ")")
+        print("Solicitud " + str(id_solicitud) + " asignada a " + descripcion_responsable)
         return True
 
     def actualizar_email(self, legajo, email):
-        if "@" not in email or "." not in email.split("@")[-1]:
+        if not self._email_valido(email):
             print("Error: email invalido")
             return False
-        for e in self.d["estudiantes"]:
-            if e["legajo"] == legajo:
-                e["email"] = email
-                self.guardar()
-                print("Email actualizado para el legajo " + legajo)
-                return True
-        print("Error: no existe el estudiante " + legajo)
-        return False
+        estudiante = self._buscar_estudiante(legajo)
+        if estudiante is None:
+            print("Error: no existe el estudiante " + legajo)
+            return False
+        estudiante["email"] = email
+        self.guardar()
+        print("Email actualizado para el legajo " + legajo)
+        return True
+
+    @staticmethod
+    def _cumple_filtros(solicitud, estado, tipo, legajo, prioridad):
+        filtros = {"estado": estado, "tipo": tipo, "legajo": legajo, "prioridad": prioridad}
+        return all(valor == "" or solicitud[campo] == valor for campo, valor in filtros.items())
 
     def buscar(self, estado, tipo, legajo, prioridad):
-        if tipo != "" and tipo != "CERTIFICADO" and tipo != "EQUIVALENCIA" and tipo != "CAMBIO_COMISION" and tipo != "RECLAMO_NOTA" and tipo != "BAJA":
+        if tipo != "" and tipo not in TIPOS_VALIDOS:
             print("Error: tipo de solicitud invalido")
             return []
-        lst = []
-        for x in self.d["solicitudes"]:
-            flag = True
-            if estado != "" and x["estado"] != estado:
-                flag = False
-            if tipo != "" and x["tipo"] != tipo:
-                flag = False
-            if legajo != "" and x["legajo"] != legajo:
-                flag = False
-            if prioridad != "" and x["prioridad"] != prioridad:
-                flag = False
-            if flag:
-                lst.append(x)
-        if len(lst) == 0:
+        encontradas = [s for s in self.datos["solicitudes"]
+                       if self._cumple_filtros(s, estado, tipo, legajo, prioridad)]
+        if len(encontradas) == 0:
             print("No se encontraron solicitudes")
-            return lst
+            return encontradas
         print("ID  LEGAJO  TIPO            PRIOR. ESTADO       RESPONSABLE")
-        for x in lst:
-            nom = "-"
-            for r in self.d["responsables"]:
-                if r["id"] == x["responsable"]:
-                    nom = r["nombre"]
-            print(str(x["id"]).ljust(4) + x["legajo"].ljust(8) + x["tipo"].ljust(16) + x["prioridad"].ljust(7) + x["estado"].ljust(13) + nom)
-        return lst
+        for solicitud in encontradas:
+            responsable = self._buscar_responsable(solicitud["responsable"])
+            nombre_responsable = responsable["nombre"] if responsable is not None else "-"
+            print(str(solicitud["id"]).ljust(4) + solicitud["legajo"].ljust(8) + solicitud["tipo"].ljust(16)
+                  + solicitud["prioridad"].ljust(7) + solicitud["estado"].ljust(13) + nombre_responsable)
+        return encontradas
+
+    def _contar(self, condicion):
+        return sum(1 for solicitud in self.datos["solicitudes"] if condicion(solicitud))
 
     def reporte(self):
-        total = len(self.d["solicitudes"])
+        total = len(self.datos["solicitudes"])
         print("===== REPORTE DE SOLICITUDES =====")
         print("Total de solicitudes: " + str(total))
         print("--- Por estado ---")
-        for est in ["PENDIENTE", "EN_REVISION", "RESUELTA", "RECHAZADA"]:
-            c = 0
-            for x in self.d["solicitudes"]:
-                if x["estado"] == est:
-                    c = c + 1
-            p = c * 100 / total
-            print(est.ljust(12) + str(c).rjust(4) + "  (" + str(round(p, 1)) + "%)")
+        for estado in ESTADOS_VALIDOS:
+            cantidad = self._contar(lambda s, e=estado: s["estado"] == e)
+            porcentaje = cantidad * 100 / total
+            print(estado.ljust(12) + str(cantidad).rjust(4) + "  (" + str(round(porcentaje, 1)) + "%)")
         print("--- Por tipo ---")
-        for t in ["CERTIFICADO", "EQUIVALENCIA", "CAMBIO_COMISION", "RECLAMO_NOTA", "BAJA"]:
-            c = 0
-            for x in self.d["solicitudes"]:
-                if x["tipo"] == t:
-                    c = c + 1
-            print(t.ljust(16) + str(c).rjust(4))
+        for tipo in TIPOS_VALIDOS:
+            cantidad = self._contar(lambda s, t=tipo: s["tipo"] == t)
+            print(tipo.ljust(16) + str(cantidad).rjust(4))
         print("--- Carga por responsable (abiertas) ---")
-        for r in self.d["responsables"]:
-            c = 0
-            for x in self.d["solicitudes"]:
-                if x["responsable"] == r["id"] and x["estado"] != "RESUELTA" and x["estado"] != "RECHAZADA":
-                    c = c + 1
-            print((r["nombre"] + " (" + r["area"] + ")").ljust(28) + str(c).rjust(4))
-        sin = 0
-        for x in self.d["solicitudes"]:
-            if x["responsable"] == None and x["estado"] != "RESUELTA" and x["estado"] != "RECHAZADA":
-                sin = sin + 1
-        print("Sin responsable".ljust(28) + str(sin).rjust(4))
+        for responsable in self.datos["responsables"]:
+            cantidad = self._contar(
+                lambda s, r=responsable: s["responsable"] == r["id"] and not self._esta_finalizada(s))
+            print((responsable["nombre"] + " (" + responsable["area"] + ")").ljust(28) + str(cantidad).rjust(4))
+        sin_responsable = self._contar(lambda s: s["responsable"] is None and not self._esta_finalizada(s))
+        print("Sin responsable".ljust(28) + str(sin_responsable).rjust(4))
         print("==================================")
 
     def listar_responsables(self):
-        for r in self.d["responsables"]:
-            print(str(r["id"]) + " - " + r["nombre"] + " (" + r["area"] + ")")
+        for responsable in self.datos["responsables"]:
+            print(str(responsable["id"]) + " - " + responsable["nombre"] + " (" + responsable["area"] + ")")
+
+    @staticmethod
+    def _pedir_entero(mensaje):
+        try:
+            return int(input(mensaje))
+        except ValueError:
+            print("Error: ID invalido")
+            return None
+
+    def _opcion_registrar(self):
+        legajo = input("Legajo: ").strip()
+        nombre = input("Nombre: ").strip()
+        apellido = input("Apellido: ").strip()
+        email = input("Email: ").strip()
+        carrera = input("Carrera: ").strip()
+        tipo = input("Tipo (CERTIFICADO/EQUIVALENCIA/CAMBIO_COMISION/RECLAMO_NOTA/BAJA): ").strip().upper()
+        descripcion = input("Descripcion: ").strip()
+        prioridad = input("Prioridad (BAJA/MEDIA/ALTA, vacio = automatica): ").strip().upper()
+        self.registrar_solicitud(legajo, nombre, apellido, email, carrera, tipo, descripcion, prioridad)
+
+    def _opcion_cambiar_estado(self):
+        id_solicitud = self._pedir_entero("ID de solicitud: ")
+        if id_solicitud is None:
+            return
+        nuevo_estado = input("Nuevo estado (EN_REVISION/RESUELTA/RECHAZADA): ").strip().upper()
+        self.cambiar_estado(id_solicitud, nuevo_estado)
+
+    def _opcion_asignar(self):
+        id_solicitud = self._pedir_entero("ID de solicitud: ")
+        if id_solicitud is None:
+            return
+        self.listar_responsables()
+        id_responsable = self._pedir_entero("ID de responsable: ")
+        if id_responsable is None:
+            return
+        self.asignar_responsable(id_solicitud, id_responsable)
+
+    def _opcion_buscar(self):
+        estado = input("Estado (vacio = todos): ").strip().upper()
+        tipo = input("Tipo (vacio = todos): ").strip().upper()
+        legajo = input("Legajo (vacio = todos): ").strip()
+        prioridad = input("Prioridad (vacio = todas): ").strip().upper()
+        self.buscar(estado, tipo, legajo, prioridad)
+
+    def _opcion_actualizar_email(self):
+        legajo = input("Legajo: ").strip()
+        email = input("Nuevo email: ").strip()
+        self.actualizar_email(legajo, email)
+
+    @staticmethod
+    def _mostrar_menu():
+        print("")
+        print("=== GESTION DE SOLICITUDES ACADEMICAS ===")
+        print("1. Registrar solicitud")
+        print("2. Cambiar estado")
+        print("3. Asignar responsable")
+        print("4. Buscar / filtrar solicitudes")
+        print("5. Reporte")
+        print("6. Listar responsables")
+        print("7. Actualizar email de estudiante")
+        print("0. Salir")
 
     def menu(self):
+        acciones = {
+            "1": self._opcion_registrar,
+            "2": self._opcion_cambiar_estado,
+            "3": self._opcion_asignar,
+            "4": self._opcion_buscar,
+            "5": self.reporte,
+            "6": self.listar_responsables,
+            "7": self._opcion_actualizar_email,
+        }
         while True:
-            print("")
-            print("=== GESTION DE SOLICITUDES ACADEMICAS ===")
-            print("1. Registrar solicitud")
-            print("2. Cambiar estado")
-            print("3. Asignar responsable")
-            print("4. Buscar / filtrar solicitudes")
-            print("5. Reporte")
-            print("6. Listar responsables")
-            print("7. Actualizar email de estudiante")
-            print("0. Salir")
-            op = input("Opcion: ").strip()
-            if op == "1":
-                legajo = input("Legajo: ").strip()
-                nombre = input("Nombre: ").strip()
-                apellido = input("Apellido: ").strip()
-                email = input("Email: ").strip()
-                carrera = input("Carrera: ").strip()
-                tipo = input("Tipo (CERTIFICADO/EQUIVALENCIA/CAMBIO_COMISION/RECLAMO_NOTA/BAJA): ").strip().upper()
-                descripcion = input("Descripcion: ").strip()
-                prioridad = input("Prioridad (BAJA/MEDIA/ALTA, vacio = automatica): ").strip().upper()
-                self.registrar_solicitud(legajo, nombre, apellido, email, carrera, tipo, descripcion, prioridad)
-            elif op == "2":
-                try:
-                    id = int(input("ID de solicitud: "))
-                except:
-                    print("Error: ID invalido")
-                    continue
-                nuevo = input("Nuevo estado (EN_REVISION/RESUELTA/RECHAZADA): ").strip().upper()
-                self.cambiar_estado(id, nuevo)
-            elif op == "3":
-                try:
-                    id = int(input("ID de solicitud: "))
-                except:
-                    print("Error: ID invalido")
-                    continue
-                self.listar_responsables()
-                try:
-                    id_resp = int(input("ID de responsable: "))
-                except:
-                    print("Error: ID invalido")
-                    continue
-                self.asignar_responsable(id, id_resp)
-            elif op == "4":
-                estado = input("Estado (vacio = todos): ").strip().upper()
-                tipo = input("Tipo (vacio = todos): ").strip().upper()
-                legajo = input("Legajo (vacio = todos): ").strip()
-                prioridad = input("Prioridad (vacio = todas): ").strip().upper()
-                self.buscar(estado, tipo, legajo, prioridad)
-            elif op == "5":
-                self.reporte()
-            elif op == "6":
-                self.listar_responsables()
-            elif op == "7":
-                legajo = input("Legajo: ").strip()
-                email = input("Nuevo email: ").strip()
-                self.actualizar_email(legajo, email)
-            elif op == "0":
+            self._mostrar_menu()
+            opcion = input("Opcion: ").strip()
+            if opcion == "0":
                 print("Hasta luego")
                 break
-            else:
+            accion = acciones.get(opcion)
+            if accion is None:
                 print("Opcion invalida")
+            else:
+                accion()
