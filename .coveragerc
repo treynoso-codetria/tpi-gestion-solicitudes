@@ -1,6 +1,6 @@
 [run]
 branch = True
-source = solicitudes
+source = solicitudes, main
 patch = subprocess
 parallel = True
 

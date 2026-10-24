@@ -7,7 +7,7 @@ saben validarse a si mismos.
 from dataclasses import dataclass
 
 from solicitudes.errores import DatosInvalidos
-from solicitudes.modelo import Prioridad, Solicitud, TipoSolicitud
+from solicitudes.modelo import Estudiante, Prioridad, Solicitud, TipoSolicitud
 from solicitudes.validaciones import es_descripcion_valida, es_email_valido, es_legajo_valido
 
 
@@ -26,6 +26,9 @@ class DatosEstudiante:
             raise DatosInvalidos("nombre y apellido son obligatorios")
         if not es_email_valido(self.email):
             raise DatosInvalidos("email invalido")
+
+    def crear_estudiante(self) -> Estudiante:
+        return Estudiante(self.legajo, self.nombre, self.apellido, self.email, self.carrera)
 
 
 @dataclass(frozen=True)
@@ -73,4 +76,4 @@ class FiltroSolicitudes:
             (self.legajo, solicitud.legajo),
             (self.prioridad, solicitud.prioridad),
         )
-        return all(buscado == "" or buscado == valor for buscado, valor in criterios)
+        return all(buscado in ("", valor) for buscado, valor in criterios)

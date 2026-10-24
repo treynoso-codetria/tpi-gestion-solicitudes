@@ -1,0 +1,6 @@
+[MAIN]
+# Los modulos y clases se documentan con docstrings donde aportan; no se exige en cada metodo.
+disable=C0114,C0115,C0116
+
+[FORMAT]
+max-line-length=100

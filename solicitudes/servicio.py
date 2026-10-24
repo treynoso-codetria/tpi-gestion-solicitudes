@@ -97,5 +97,4 @@ class ServicioSolicitudes:
         if estudiante is not None:
             estudiante.email = datos.email
             return
-        self._repositorio.agregar_estudiante(
-            Estudiante(datos.legajo, datos.nombre, datos.apellido, datos.email, datos.carrera))
+        self._repositorio.agregar_estudiante(datos.crear_estudiante())

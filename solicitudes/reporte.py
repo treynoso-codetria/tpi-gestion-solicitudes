@@ -31,7 +31,8 @@ class GeneradorReporte:
         lineas = ["--- Por estado ---"]
         for estado in Estado:
             cantidad = _contar(solicitudes, lambda s, e=estado: s.estado is e)
-            lineas.append(f"{estado:<12}{cantidad:>4}  ({_porcentaje(cantidad, len(solicitudes))}%)")
+            porcentaje = _porcentaje(cantidad, len(solicitudes))
+            lineas.append(f"{estado:<12}{cantidad:>4}  ({porcentaje}%)")
         return lineas
 
     @staticmethod

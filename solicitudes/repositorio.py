@@ -8,7 +8,9 @@ siguen funcionando.
 from typing import Protocol
 
 from solicitudes.almacenamiento import Almacenamiento
-from solicitudes.modelo import Estado, Estudiante, Evento, Prioridad, Responsable, Solicitud, TipoSolicitud
+from solicitudes.modelo import (
+    Estado, Estudiante, Evento, Prioridad, Responsable, Solicitud, TipoSolicitud,
+)
 
 RESPONSABLES_INICIALES = (
     Responsable(1, "Laura Gomez", "Alumnado"),
@@ -29,13 +31,14 @@ class LectorSolicitudes(Protocol):
 class RepositorioSolicitudes:
     def __init__(self, almacenamiento: Almacenamiento):
         self._almacenamiento = almacenamiento
-        documento = almacenamiento.cargar()
-        if documento is None:
-            documento = {"solicitudes": [], "estudiantes": [], "responsables": [], "ultimo_id": 0}
+        documento = almacenamiento.cargar() or _documento_vacio()
         self._solicitudes = [_solicitud_desde_dict(d) for d in documento["solicitudes"]]
         self._estudiantes = [Estudiante(**d) for d in documento["estudiantes"]]
         self._responsables = [Responsable(**d) for d in documento["responsables"]]
         self._ultimo_id = documento["ultimo_id"]
+        self._crear_responsables_iniciales_si_faltan()
+
+    def _crear_responsables_iniciales_si_faltan(self) -> None:
         if not self._responsables:
             self._responsables = list(RESPONSABLES_INICIALES)
             self.guardar_cambios()
@@ -71,9 +74,13 @@ class RepositorioSolicitudes:
         self._almacenamiento.guardar({
             "solicitudes": [_solicitud_a_dict(s) for s in self._solicitudes],
             "estudiantes": [vars(e).copy() for e in self._estudiantes],
-            "responsables": [{"id": r.id, "nombre": r.nombre, "area": r.area} for r in self._responsables],
+            "responsables": [vars(r).copy() for r in self._responsables],
             "ultimo_id": self._ultimo_id,
         })
+
+
+def _documento_vacio() -> dict:
+    return {"solicitudes": [], "estudiantes": [], "responsables": [], "ultimo_id": 0}
 
 
 def _solicitud_desde_dict(datos: dict) -> Solicitud:
