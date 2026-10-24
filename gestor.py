@@ -1,10 +1,9 @@
 import json
 from datetime import datetime
 
+from solicitudes.modelo import Estado, Prioridad, TipoSolicitud
+
 ARCHIVO = "solicitudes.json"
-TIPOS_VALIDOS = ("CERTIFICADO", "EQUIVALENCIA", "CAMBIO_COMISION", "RECLAMO_NOTA", "BAJA")
-ESTADOS_VALIDOS = ("PENDIENTE", "EN_REVISION", "RESUELTA", "RECHAZADA")
-ESTADOS_FINALES = ("RESUELTA", "RECHAZADA")
 
 
 class GestorSolicitudes:
@@ -47,7 +46,7 @@ class GestorSolicitudes:
 
     @staticmethod
     def _esta_finalizada(solicitud):
-        return solicitud["estado"] in ESTADOS_FINALES
+        return Estado(solicitud["estado"]).es_final
 
     def _buscar_solicitud(self, id_solicitud):
         for solicitud in self.datos["solicitudes"]:
@@ -79,7 +78,7 @@ class GestorSolicitudes:
             return "Error: nombre y apellido son obligatorios"
         if not GestorSolicitudes._email_valido(email):
             return "Error: email invalido"
-        if tipo not in TIPOS_VALIDOS:
+        if TipoSolicitud.desde_texto(tipo) is None:
             return "Error: tipo de solicitud invalido"
         if len(descripcion.strip()) < 10:
             return "Error: la descripcion debe tener al menos 10 caracteres"
@@ -99,38 +98,16 @@ class GestorSolicitudes:
         })
 
     @staticmethod
-    def _prioridad_por_defecto(tipo):
-        if tipo in ("RECLAMO_NOTA", "BAJA"):
-            return "ALTA"
-        if tipo in ("EQUIVALENCIA", "CAMBIO_COMISION"):
-            return "MEDIA"
-        return "BAJA"
-
-    @staticmethod
-    def _dias_de_plazo(prioridad):
-        if prioridad == "ALTA":
-            return 3
-        if prioridad == "MEDIA":
-            return 7
-        return 15
-
-    @staticmethod
     def _transicion_permitida(solicitud, nuevo_estado):
         """Devuelve el mensaje de error o None si la transicion es valida."""
-        actual = solicitud["estado"]
-        if actual == "PENDIENTE":
-            if nuevo_estado == "EN_REVISION":
-                if solicitud["responsable"] is None:
-                    return "Error: debe asignar un responsable antes de pasar a revision"
-                return None
-            if nuevo_estado == "RECHAZADA":
-                return None
-        elif actual == "EN_REVISION":
-            if nuevo_estado in ("RESUELTA", "RECHAZADA"):
-                return None
-        else:
+        actual = Estado(solicitud["estado"])
+        if actual.es_final:
             return "Error: la solicitud " + str(solicitud["id"]) + " ya esta finalizada"
-        return "Error: transicion no permitida de " + actual + " a " + nuevo_estado
+        if not actual.puede_pasar_a(nuevo_estado):
+            return "Error: transicion no permitida de " + actual + " a " + nuevo_estado
+        if nuevo_estado is Estado.EN_REVISION and solicitud["responsable"] is None:
+            return "Error: debe asignar un responsable antes de pasar a revision"
+        return None
 
     # ---------------------------------------------------------------
     # Operaciones
@@ -144,11 +121,11 @@ class GestorSolicitudes:
         self._registrar_o_actualizar_estudiante(legajo, nombre, apellido, email, carrera)
 
         if prioridad == "":
-            prioridad = self._prioridad_por_defecto(tipo)
-        elif prioridad not in ("BAJA", "MEDIA", "ALTA"):
+            prioridad = TipoSolicitud(tipo).prioridad_por_defecto
+        elif Prioridad.desde_texto(prioridad) is None:
             print("Error: prioridad invalida")
             return -1
-        dias = self._dias_de_plazo(prioridad)
+        dias = Prioridad(prioridad).dias_de_plazo
 
         self.datos["ultimo_id"] = self.datos["ultimo_id"] + 1
         solicitud = {
@@ -156,8 +133,8 @@ class GestorSolicitudes:
             "legajo": legajo,
             "tipo": tipo,
             "descripcion": descripcion,
-            "prioridad": prioridad,
-            "estado": "PENDIENTE",
+            "prioridad": str(prioridad),
+            "estado": str(Estado.PENDIENTE),
             "responsable": None,
             "fecha": self._fecha_hoy(),
             "dias_sla": dias,
@@ -174,7 +151,8 @@ class GestorSolicitudes:
         if solicitud is None:
             print("Error: no existe la solicitud " + str(id_solicitud))
             return False
-        if nuevo_estado not in ESTADOS_VALIDOS:
+        nuevo_estado = Estado.desde_texto(nuevo_estado)
+        if nuevo_estado is None:
             print("Error: estado invalido")
             return False
         error = self._transicion_permitida(solicitud, nuevo_estado)
@@ -183,7 +161,7 @@ class GestorSolicitudes:
             return False
 
         self._registrar_evento(solicitud, "Cambio de " + solicitud["estado"] + " a " + nuevo_estado)
-        solicitud["estado"] = nuevo_estado
+        solicitud["estado"] = str(nuevo_estado)
         self.guardar()
         print("Solicitud " + str(id_solicitud) + " ahora esta en estado " + nuevo_estado)
         return True
@@ -226,7 +204,7 @@ class GestorSolicitudes:
         return all(valor == "" or solicitud[campo] == valor for campo, valor in filtros.items())
 
     def buscar(self, estado, tipo, legajo, prioridad):
-        if tipo != "" and tipo not in TIPOS_VALIDOS:
+        if tipo != "" and TipoSolicitud.desde_texto(tipo) is None:
             print("Error: tipo de solicitud invalido")
             return []
         encontradas = [s for s in self.datos["solicitudes"]
@@ -250,12 +228,12 @@ class GestorSolicitudes:
         print("===== REPORTE DE SOLICITUDES =====")
         print("Total de solicitudes: " + str(total))
         print("--- Por estado ---")
-        for estado in ESTADOS_VALIDOS:
+        for estado in Estado:
             cantidad = self._contar(lambda s, e=estado: s["estado"] == e)
             porcentaje = cantidad * 100 / total
             print(estado.ljust(12) + str(cantidad).rjust(4) + "  (" + str(round(porcentaje, 1)) + "%)")
         print("--- Por tipo ---")
-        for tipo in TIPOS_VALIDOS:
+        for tipo in TipoSolicitud:
             cantidad = self._contar(lambda s, t=tipo: s["tipo"] == t)
             print(tipo.ljust(16) + str(cantidad).rjust(4))
         print("--- Carga por responsable (abiertas) ---")
