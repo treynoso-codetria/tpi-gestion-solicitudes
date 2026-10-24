@@ -1,0 +1,11 @@
+test_d1_reporte_sin_solicitudes_no_debe_fallar (tests.test_defectos_conocidos.TestDefectosConocidos.test_d1_reporte_sin_solicitudes_no_debe_fallar) ... expected failure
+test_d2_registro_rechazado_no_debe_crear_al_estudiante (tests.test_defectos_conocidos.TestDefectosConocidos.test_d2_registro_rechazado_no_debe_crear_al_estudiante) ... expected failure
+test_d3_archivo_danado_no_debe_sobrescribirse (tests.test_defectos_conocidos.TestDefectosConocidos.test_d3_archivo_danado_no_debe_sobrescribirse) ... expected failure
+test_el_archivo_de_datos_no_cambia (tests.test_golden_master.TestGoldenMaster.test_el_archivo_de_datos_no_cambia) ... ok
+test_el_programa_termina_sin_errores (tests.test_golden_master.TestGoldenMaster.test_el_programa_termina_sin_errores) ... ok
+test_la_salida_por_consola_no_cambia (tests.test_golden_master.TestGoldenMaster.test_la_salida_por_consola_no_cambia) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.216s
+
+OK (expected failures=3)

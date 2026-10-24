@@ -1,0 +1,16 @@
+gestor.py
+    M 35:4 GestorSolicitudes.registrar_solicitud - D (27)
+    M 186:4 GestorSolicitudes.buscar - D (21)
+    M 215:4 GestorSolicitudes.reporte - C (16)
+    M 111:4 GestorSolicitudes.cambiar_estado - C (15)
+    M 252:4 GestorSolicitudes.menu - C (13)
+    C 8:0 GestorSolicitudes - C (11)
+    M 149:4 GestorSolicitudes.asignar_responsable - B (9)
+    M 173:4 GestorSolicitudes.actualizar_email - A (5)
+    M 11:4 GestorSolicitudes.__init__ - A (2)
+    M 22:4 GestorSolicitudes.cargar - A (2)
+    M 248:4 GestorSolicitudes.listar_responsables - A (2)
+    M 30:4 GestorSolicitudes.guardar - A (1)
+
+12 blocks (classes, functions, methods) analyzed.
+Average complexity: C (10.333333333333334)

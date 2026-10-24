@@ -1,0 +1,12 @@
+gestor.py
+    LOC: 314
+    LLOC: 280
+    SLOC: 288
+    Comments: 6
+    Single comments: 6
+    Multi: 0
+    Blank: 20
+    - Comment Stats
+        (C % L): 2%
+        (C % S): 2%
+        (C + M % L): 2%
