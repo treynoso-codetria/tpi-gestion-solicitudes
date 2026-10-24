@@ -1,15 +1,16 @@
 Name                            Stmts   Miss Branch BrPart  Cover   Missing
 ---------------------------------------------------------------------------
+main.py                            20      0      2      1    95%   29->exit
 solicitudes/almacenamiento.py      29      0      2      0   100%
-solicitudes/cli.py                 85      1     16      1    98%   96
+solicitudes/cli.py                 92      1     16      1    98%   105
 solicitudes/errores.py              4      0      0      0   100%
 solicitudes/modelo.py              92      0      6      0   100%
-solicitudes/pedidos.py             48      0     16      0   100%
-solicitudes/reporte.py             44      0      8      0   100%
-solicitudes/repositorio.py         41      1      4      2    93%   33->35, 39->exit, 80
+solicitudes/pedidos.py             50      0     16      0   100%
+solicitudes/reporte.py             45      0      8      0   100%
+solicitudes/repositorio.py         43      1      2      1    96%   42->exit, 87
 solicitudes/servicio.py            68      0     14      0   100%
 solicitudes/validaciones.py         8      0      0      0   100%
 ---------------------------------------------------------------------------
-TOTAL                             419      2     66      3    99%
+TOTAL                             451      2     66      3    99%
 
 1 empty file skipped.

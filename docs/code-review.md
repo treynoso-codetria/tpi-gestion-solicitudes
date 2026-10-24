@@ -46,4 +46,26 @@
 
 ## 3. Correcciones realizadas
 
-Ver la sección 4. Se completa después de aplicar las correcciones.
+| ID | Estado | Commit | Verificación |
+|---|---|---|---|
+| CR-01 | Corregido | `73fe15d`, `3e22c4f` | pylint ya no reporta `line-too-long`. |
+| CR-02 | Corregido | `73fe15d` | CC del constructor: 6 → 2. CC máxima del proyecto: 5. |
+| CR-03 | Corregido | `73fe15d` | pylint ya no reporta `consider-using-in`. Los tests del filtro pasan. |
+| CR-04 | Corregido | `73fe15d` | `main.py` aparece en el reporte de cobertura (95 %). |
+| CR-05 | Aceptado | — | Documentado en esta revisión. |
+| CR-06 | Corregido | `73fe15d` | La conversión vive en `DatosEstudiante`. pylint sigue marcando `duplicate-code` por los cinco campos en común; se acepta según lo justificado arriba. |
+| CR-07 | Aceptado | — | — |
+| CR-08 | Aceptado | — | — |
+| CR-09 | Aceptado | — | El golden master lo garantiza. |
+| CR-10 | Corregido | `3e22c4f` | `test_cr10_fin_de_entrada_no_muestra_traza` falla en `estado-inicial` y pasa en la versión actual. |
+
+## 4. Resultado de la revisión
+
+| Métrica | Al iniciar la revisión | Al cerrar la revisión |
+|---|---|---|
+| Tests | 54 | 56 |
+| Cobertura de sentencias / ramas | 99,5 % / 95,5 % (sin `main.py`) | 99,6 % / 95,5 % (con `main.py`) |
+| CC máxima / promedio | 6 / 1,98 | 5 / 1,92 |
+| pylint | 9,79 / 10 | 9,91 / 10 (las 4 advertencias restantes están aceptadas: CR-06, CR-07 y CR-08) |
+
+**Dictamen:** aprobado. Todos los ítems bloqueantes del checklist están en ✅. Las observaciones no bloqueantes quedaron corregidas o aceptadas con justificación.

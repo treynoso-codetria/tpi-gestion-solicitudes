@@ -8,6 +8,7 @@ test_devuelve_lo_que_se_guardo (tests.test_almacenamiento.TestAlmacenamientoJSON
 test_el_repositorio_funciona_con_esta_implementacion (tests.test_almacenamiento.TestAlmacenamientoJSON.test_el_repositorio_funciona_con_esta_implementacion) ... ok
 test_modificar_lo_cargado_no_altera_lo_guardado (tests.test_almacenamiento.TestAlmacenamientoJSON.test_modificar_lo_cargado_no_altera_lo_guardado) ... ok
 test_sin_datos_devuelve_none (tests.test_almacenamiento.TestAlmacenamientoJSON.test_sin_datos_devuelve_none) ... ok
+test_cr10_fin_de_entrada_no_muestra_traza (tests.test_defectos_conocidos.TestDefectosConocidos.test_cr10_fin_de_entrada_no_muestra_traza) ... ok
 test_d1_reporte_sin_solicitudes_no_debe_fallar (tests.test_defectos_conocidos.TestDefectosConocidos.test_d1_reporte_sin_solicitudes_no_debe_fallar) ... ok
 test_d2_registro_rechazado_no_debe_crear_al_estudiante (tests.test_defectos_conocidos.TestDefectosConocidos.test_d2_registro_rechazado_no_debe_crear_al_estudiante) ... ok
 test_d3_archivo_danado_no_debe_sobrescribirse (tests.test_defectos_conocidos.TestDefectosConocidos.test_d3_archivo_danado_no_debe_sobrescribirse) ... ok
@@ -33,6 +34,7 @@ test_pedido_valido_no_lanza_error (tests.test_pedidos.TestValidacionDelPedido.te
 test_prioridad_efectiva (tests.test_pedidos.TestValidacionDelPedido.test_prioridad_efectiva) ... ok
 test_valores_limite (tests.test_pedidos.TestValidacionDelPedido.test_valores_limite) ... ok
 test_error_de_negocio_se_muestra_y_el_menu_continua (tests.test_reporte_y_cli.TestConsola.test_error_de_negocio_se_muestra_y_el_menu_continua) ... ok
+test_fin_de_entrada_sale_ordenadamente (tests.test_reporte_y_cli.TestConsola.test_fin_de_entrada_sale_ordenadamente) ... ok
 test_id_no_numerico (tests.test_reporte_y_cli.TestConsola.test_id_no_numerico) ... ok
 test_opcion_invalida_y_salida (tests.test_reporte_y_cli.TestConsola.test_opcion_invalida_y_salida) ... ok
 test_registro_completo (tests.test_reporte_y_cli.TestConsola.test_registro_completo) ... ok
@@ -54,6 +56,6 @@ test_persiste_la_solicitud (tests.test_servicio.TestRegistrarSolicitud.test_pers
 test_registra_con_prioridad_y_plazo_segun_el_tipo (tests.test_servicio.TestRegistrarSolicitud.test_registra_con_prioridad_y_plazo_segun_el_tipo) ... ok
 
 ----------------------------------------------------------------------
-Ran 54 tests in 0.363s
+Ran 56 tests in 0.412s
 
 OK
