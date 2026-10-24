@@ -1,19 +1,18 @@
-import json
 from datetime import datetime
 
+from solicitudes.almacenamiento import Almacenamiento
 from solicitudes.modelo import Estado, TipoSolicitud
 from solicitudes.pedidos import DatosEstudiante, PedidoSolicitud
 from solicitudes.validaciones import es_email_valido
-
-ARCHIVO = "solicitudes.json"
 
 
 class GestorSolicitudes:
     # clase principal del sistema
 
-    def __init__(self):
-        self.datos = {"solicitudes": [], "estudiantes": [], "responsables": [], "ultimo_id": 0}
-        self.cargar()
+    def __init__(self, almacenamiento: Almacenamiento):
+        self.almacenamiento = almacenamiento
+        self.datos = almacenamiento.cargar() or {
+            "solicitudes": [], "estudiantes": [], "responsables": [], "ultimo_id": 0}
         if len(self.datos["responsables"]) == 0:
             # responsables por defecto
             self.datos["responsables"].append({"id": 1, "nombre": "Laura Gomez", "area": "Alumnado"})
@@ -22,18 +21,8 @@ class GestorSolicitudes:
             self.datos["responsables"].append({"id": 4, "nombre": "Diego Paz", "area": "Tesoreria"})
             self.guardar()
 
-    def cargar(self):
-        try:
-            f = open(ARCHIVO, "r", encoding="utf-8")
-            self.datos = json.load(f)
-            f.close()
-        except:
-            pass
-
     def guardar(self):
-        f = open(ARCHIVO, "w", encoding="utf-8")
-        json.dump(self.datos, f, indent=2, ensure_ascii=False)
-        f.close()
+        self.almacenamiento.guardar(self.datos)
 
     # ---------------------------------------------------------------
     # Metodos extraidos (antes el codigo estaba duplicado)

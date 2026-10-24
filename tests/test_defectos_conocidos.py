@@ -39,7 +39,6 @@ class TestDefectosConocidos(unittest.TestCase):
         self.assertIn("Error: prioridad invalida", salida)
         self.assertIn("Error: no existe el estudiante 20001", salida)
 
-    @unittest.expectedFailure
     def test_d3_archivo_danado_no_debe_sobrescribirse(self):
         archivo = Path(self.directorio) / ARCHIVO_DATOS
         contenido_original = '{"solicitudes": [ {"id": 1, '
