@@ -23,6 +23,8 @@ MENU = """
 7. Actualizar email de estudiante
 0. Salir"""
 
+PREGUNTA_TIPO = "Tipo (CERTIFICADO/EQUIVALENCIA/CAMBIO_COMISION/RECLAMO_NOTA/BAJA): "
+PREGUNTA_PRIORIDAD = "Prioridad (BAJA/MEDIA/ALTA, vacio = automatica): "
 ENCABEZADO_LISTADO = "ID  LEGAJO  TIPO            PRIOR. ESTADO       RESPONSABLE"
 
 
@@ -44,11 +46,18 @@ class ConsolaSolicitudes:
         }
 
     def ejecutar(self) -> None:
+        try:
+            self._bucle_principal()
+        except (EOFError, KeyboardInterrupt):
+            # Ctrl+D / Ctrl+C o fin del archivo de entrada: salir sin traza de error (CR-10).
+            self._escribir("")
+        self._escribir("Hasta luego")
+
+    def _bucle_principal(self) -> None:
         while True:
             self._escribir(MENU)
             opcion = self._leer("Opcion: ").strip()
             if opcion == "0":
-                self._escribir("Hasta luego")
                 return
             accion = self._acciones.get(opcion)
             if accion is None:
@@ -70,9 +79,9 @@ class ConsolaSolicitudes:
         )
         pedido = PedidoSolicitud(
             estudiante=estudiante,
-            tipo=self._codigo("Tipo (CERTIFICADO/EQUIVALENCIA/CAMBIO_COMISION/RECLAMO_NOTA/BAJA): "),
+            tipo=self._codigo(PREGUNTA_TIPO),
             descripcion=self._texto("Descripcion: "),
-            prioridad=self._codigo("Prioridad (BAJA/MEDIA/ALTA, vacio = automatica): "),
+            prioridad=self._codigo(PREGUNTA_PRIORIDAD),
         )
         solicitud = self._servicio.registrar(pedido)
         self._escribir(f"Solicitud registrada con ID {solicitud.id} "

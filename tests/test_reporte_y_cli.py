@@ -35,9 +35,16 @@ class TestConsola(unittest.TestCase):
     def ejecutar(self, *entradas):
         servicio, repositorio, _ = servicio_en_memoria()
         respuestas = iter(entradas)
+
+        def leer(_mensaje):
+            try:
+                return next(respuestas)
+            except StopIteration:
+                raise EOFError from None  # igual que input() al terminar la entrada
+
         salida = []
-        consola = ConsolaSolicitudes(servicio, GeneradorReporte(repositorio),
-                                     leer=lambda _mensaje: next(respuestas), escribir=salida.append)
+        consola = ConsolaSolicitudes(servicio, GeneradorReporte(repositorio), leer=leer,
+                                     escribir=salida.append)
         consola.ejecutar()
         return salida
 
@@ -54,6 +61,11 @@ class TestConsola(unittest.TestCase):
         salida = self.ejecutar("2", "5", "EN_REVISION", "6", "0")
         self.assertIn("Error: no existe la solicitud 5", salida)
         self.assertIn("1 - Laura Gomez (Alumnado)", salida)
+
+    def test_fin_de_entrada_sale_ordenadamente(self):
+        # Hallazgo CR-10 del code review: antes terminaba con EOFError.
+        salida = self.ejecutar("6")
+        self.assertEqual("Hasta luego", salida[-1])
 
     def test_registro_completo(self):
         salida = self.ejecutar("1", "10234", "Ana", "Lopez", "ana@mail.com", "TUP", "reclamo_nota",

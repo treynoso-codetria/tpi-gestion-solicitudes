@@ -47,6 +47,13 @@ class TestDefectosConocidos(unittest.TestCase):
         self.assertNotEqual(0, codigo)
         self.assertIn("Error: no se pudo leer solicitudes.json", salida)
 
+    def test_cr10_fin_de_entrada_no_muestra_traza(self):
+        # Detectado en el code review (CR-10), no en el diagnostico inicial.
+        salida, errores, codigo = ejecutar_cli("6\n", self.directorio)
+        self.assertEqual(0, codigo)
+        self.assertEqual("", errores)
+        self.assertTrue(salida.rstrip().endswith("Hasta luego"))
+
 
 if __name__ == "__main__":
     unittest.main()
