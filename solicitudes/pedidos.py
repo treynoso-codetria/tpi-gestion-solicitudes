@@ -1,12 +1,13 @@
 """Objetos parametro (Introduce Parameter Object).
 
-Reemplazan los 8 parametros sueltos de registrar_solicitud por dos objetos
-con nombre y con la responsabilidad de validarse a si mismos.
+Reemplazan las listas largas de parametros sueltos por objetos con nombre que
+saben validarse a si mismos.
 """
 
 from dataclasses import dataclass
 
-from solicitudes.modelo import Prioridad, TipoSolicitud
+from solicitudes.errores import DatosInvalidos
+from solicitudes.modelo import Prioridad, Solicitud, TipoSolicitud
 from solicitudes.validaciones import es_descripcion_valida, es_email_valido, es_legajo_valido
 
 
@@ -18,14 +19,13 @@ class DatosEstudiante:
     email: str
     carrera: str
 
-    def error_de_validacion(self) -> str | None:
+    def validar(self) -> None:
         if not es_legajo_valido(self.legajo):
-            return "Error: legajo invalido"
+            raise DatosInvalidos("legajo invalido")
         if self.nombre.strip() == "" or self.apellido.strip() == "":
-            return "Error: nombre y apellido son obligatorios"
+            raise DatosInvalidos("nombre y apellido son obligatorios")
         if not es_email_valido(self.email):
-            return "Error: email invalido"
-        return None
+            raise DatosInvalidos("email invalido")
 
 
 @dataclass(frozen=True)
@@ -37,20 +37,40 @@ class PedidoSolicitud:
     descripcion: str
     prioridad: str = ""  # vacio = se calcula segun el tipo
 
-    def error_de_validacion(self) -> str | None:
+    def validar(self) -> None:
         """Valida TODO el pedido antes de modificar datos (corrige el defecto D2)."""
-        error = self.estudiante.error_de_validacion()
-        if error is not None:
-            return error
+        self.estudiante.validar()
         if TipoSolicitud.desde_texto(self.tipo) is None:
-            return "Error: tipo de solicitud invalido"
+            raise DatosInvalidos("tipo de solicitud invalido")
         if not es_descripcion_valida(self.descripcion):
-            return "Error: la descripcion debe tener al menos 10 caracteres"
+            raise DatosInvalidos("la descripcion debe tener al menos 10 caracteres")
         if self.prioridad != "" and Prioridad.desde_texto(self.prioridad) is None:
-            return "Error: prioridad invalida"
-        return None
+            raise DatosInvalidos("prioridad invalida")
 
     def prioridad_efectiva(self) -> Prioridad:
         if self.prioridad == "":
             return TipoSolicitud(self.tipo).prioridad_por_defecto
         return Prioridad(self.prioridad)
+
+
+@dataclass(frozen=True)
+class FiltroSolicitudes:
+    """Criterios de busqueda. Un campo vacio significa 'cualquiera'."""
+
+    estado: str = ""
+    tipo: str = ""
+    legajo: str = ""
+    prioridad: str = ""
+
+    def validar(self) -> None:
+        if self.tipo != "" and TipoSolicitud.desde_texto(self.tipo) is None:
+            raise DatosInvalidos("tipo de solicitud invalido")
+
+    def acepta(self, solicitud: Solicitud) -> bool:
+        criterios = (
+            (self.estado, solicitud.estado),
+            (self.tipo, solicitud.tipo),
+            (self.legajo, solicitud.legajo),
+            (self.prioridad, solicitud.prioridad),
+        )
+        return all(buscado == "" or buscado == valor for buscado, valor in criterios)
