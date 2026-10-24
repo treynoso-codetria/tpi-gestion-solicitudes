@@ -4,3 +4,5 @@ solicitudes.json
 .coverage
 htmlcov/
 .venv/
+.coverage.*
+coverage.xml

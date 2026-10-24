@@ -1,0 +1,9 @@
+[run]
+branch = True
+source = solicitudes
+patch = subprocess
+parallel = True
+
+[report]
+show_missing = True
+skip_empty = True
